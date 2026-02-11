@@ -1,0 +1,448 @@
+🧠 PROJECT OVERVIEW
+Website name
+
+NoteSnap
+
+What the site is about
+
+A product landing page for a fictional service that:
+
+turns messy notes into clean, structured summaries.
+
+The goal of the site is not functionality, but:
+
+strong UI/UX
+
+scroll-triggered animations
+
+storytelling through text + motion
+
+portfolio-quality design
+
+🧱 SITE STRUCTURE (SECTIONS)
+
+We agreed on a clean, limited number of sections:
+
+Hero section
+
+Combined Problem + Solution section
+
+Features / Benefits section
+
+How It Works section
+
+Call To Action (CTA)
+
+Footer
+
+1️⃣ HERO SECTION
+Purpose
+
+Introduce NoteSnap immediately
+
+Set visual style
+
+Introduce the character (robot)
+
+Layout
+
+Left side: text
+
+Right side: robot character + messy notes visuals
+
+Content (text)
+
+Headline (big, animated):
+
+“Your messy notes. Cleaned instantly.”
+
+Subheadline:
+
+“Snap, organize, and share — smarter notes, faster.”
+
+CTA button:
+
+“Try NoteSnap”
+
+Animations
+
+Headline fades/slides in on load
+
+Subheadline appears slightly after (staggered)
+
+CTA button hover animation (scale / shadow)
+
+Robot:
+
+subtle floating (up/down)
+
+head tilt
+
+Messy notes:
+
+slow floating motion
+
+random placement (represents chaos)
+
+2️⃣ COMBINED PROBLEM + SOLUTION SECTION (CORE SECTION)
+
+This is the main creative section of the site.
+
+Purpose
+
+Show problems AND solutions together
+
+Tell a story with scroll
+
+Sync text (left) with visual animation (right)
+
+Layout
+
+Left 50%: text
+
+Right 50%: animated visuals (notes + robot)
+
+Left Side (Text)
+
+The text appears step by step as you scroll.
+
+Each problem is followed by its solution.
+
+Example structure:
+
+Problem 1:
+
+“Too many scribbles. Notes get lost.”
+
+Solution 1:
+
+“NoteSnap organizes everything instantly.”
+
+Problem 2:
+
+“Important details buried in chaos.”
+
+Solution 2:
+
+“Find what matters at a glance.”
+
+Problem 3:
+
+“Sharing notes is slow and messy.”
+
+Solution 3:
+
+“One click to share clean notes.”
+
+Text animations
+
+Each line:
+
+fades in
+
+slides slightly from bottom or side
+
+Problems and solutions are separate scroll moments
+
+Right Side (Visual Representation)
+
+This side reacts to the text.
+
+Visual concept
+
+Notes are DOM or SVG elements
+
+At first:
+
+scattered
+
+rotated
+
+messy
+
+When solution text appears:
+
+notes align
+
+stack
+
+snap into order
+
+Robot role (illusion-based interaction)
+
+Robot does NOT physically grab notes
+
+Robot:
+
+looks at notes
+
+tilts head
+
+moves arm slightly
+
+Notes animate in sync → illusion of interaction
+
+3️⃣ FEATURES / BENEFITS SECTION
+Purpose
+
+Clearly communicate value
+
+Give structure after storytelling
+
+Layout
+
+3–4 feature cards (grid or vertical)
+
+Content
+
+Fast Summaries
+“Turn any notes into concise summaries instantly.”
+
+Organized by Topic
+“Automatically categorized notes.”
+
+Searchable Notes
+“Find anything in seconds.”
+
+Easy Sharing
+“Send clean notes anywhere.”
+
+Animations
+
+Cards fade/slide in on scroll
+
+Hover effects:
+
+slight scale
+
+subtle shadow
+
+Optional:
+
+small floating icons
+
+4️⃣ HOW IT WORKS SECTION
+Purpose
+
+Explain workflow simply
+
+Reinforce clarity theme
+
+Layout
+
+Step-based layout (horizontal or vertical)
+
+Text + simple visuals
+
+Content
+
+Snap your notes
+
+AI organizes them
+
+Export or share
+
+Animations
+
+Each step appears on scroll
+
+Connecting lines animate in
+
+Robot:
+
+moves slightly between steps
+
+points or gestures
+
+5️⃣ CALL TO ACTION (CTA)
+Purpose
+
+Final conversion moment
+
+Layout
+
+Full-width section
+
+Centered content
+
+Content
+
+Headline:
+
+“Turn chaos into clarity.”
+
+CTA button:
+
+“Start Using NoteSnap”
+
+Animations
+
+Background gradient or blob animation
+
+CTA hover animation
+
+Robot:
+
+waves
+
+points to button
+
+6️⃣ FOOTER
+Purpose
+
+Close the experience cleanly
+
+Content
+
+Navigation links
+
+Social links
+
+Small tagline:
+
+“NoteSnap — Notes made simple.”
+
+Animations
+
+Minimal
+
+Icon hover effects
+
+🤖 CHARACTER (ROBOT)
+What it is
+
+SVG-based robot character
+
+Not a photo
+
+Not 3D
+
+Built from simple shapes
+
+Style
+
+Hand-drawn look (like CAIDE’s dog)
+
+Outline only
+
+Black or dark gray stroke
+
+Minimal shading
+
+Friendly, curious personality
+
+Structure (important)
+
+The SVG is grouped into parts:
+
+head
+
+eyes
+
+body
+
+left arm
+
+right arm
+
+left leg
+
+right leg
+
+This allows animation.
+
+Animations used
+
+Floating
+
+Head tilt
+
+Arm rotation
+
+Simple walking illusion (leg swing + body bob)
+
+Eye blink / look direction
+
+🎨 COLOR PALETTE
+
+We didn’t lock one, but recommended:
+
+Background: white or #FDFDFD
+
+Text:  #151515
+
+Accent color: ONE bright color
+Action color: #3B82F6
+and also: Soft Gray #F5F5F5
+
+✍️ TYPOGRAPHY
+
+We agreed on two fonts:
+
+1️⃣ Headline Font (Unique)
+
+Used for:
+
+hero headline
+
+section titles
+
+Recommended options:
+
+Monument Extended
+
+Space Grotesk
+
+TT Norms Pro
+
+Orbitron
+
+2️⃣ Body Font (Common & Readable)
+
+Used for:
+
+paragraphs
+
+feature text
+
+buttons
+
+Recommended options:
+
+Inter
+
+Work Sans
+
+Roboto
+
+🌀 ANIMATION PRINCIPLES
+
+Across the site:
+
+Scroll-triggered animations (GSAP ScrollTrigger)
+
+Small, smooth movements
+
+No heavy effects
+
+Illusion over realism
+
+Text and visuals always synced
+
+✅ WHAT THIS SITE DEMONSTRATES (IMPORTANT)
+
+This project shows:
+
+UI storytelling
+
+Scroll-based animation logic
+
+SVG animation knowledge
+
+Design thinking
+
+Clean, modern layout
+
+Character-driven branding
+
+This is portfolio gold if done well.
