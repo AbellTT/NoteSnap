@@ -1,8 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Space+Grotesk:wght@700&family=Michroma&family=Unbounded:wght@900&family=Dela+Gothic+One&family=Syncopate:wght@700&family=Krona+One&family=Righteous&display=swap');
 @import "tailwindcss";
 
 @font-face {
   font-family: 'AKONY';
   src: url('./assets/font/AKONY.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sk-Modernist';
+  src: url('./assets/font/Sk-Modernist-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gyst';
+  src: url('./assets/font/gyst/Gyst-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gyst';
+  src: url('./assets/font/gyst/Gyst-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Projekt-Blackbird';
+  src: url('./assets/font/projekt-blackbird-v2.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,12 +47,36 @@
   --color-brand-action: #3B82F6;
   --color-brand-soft-gray: #F5F5F5;
 
-  --font-headline: "AKONY", "Monument Extended", "Space Grotesk", sans-serif;
-  --font-body: Inter, "Work Sans", Roboto, sans-serif;
+  /* 
+     EASY FONT SWAP: 
+     To change the global fonts, just swap the variable names below 
+     with any of the "Utility Fonts" defined further down.
+  */
+  --font-headline: var(--font-dela); 
+  --font-body: var(--font-sk);
+
+  /* Utility Fonts for Previews */
+  --font-akony: "AKONY", sans-serif;
+  --font-blackbird: "Projekt-Blackbird", sans-serif;
+  --font-sk: "Sk-Modernist", sans-serif;
+  --font-gyst: "Gyst", sans-serif;
+
+  /* Recursive Search Recommendations */
+  --font-syne: "Syne", sans-serif;
+  --font-space: "Space Grotesk", sans-serif;
+  --font-michroma: "Michroma", sans-serif;
+  --font-unbounded: "Unbounded", sans-serif;
+
+  /* Round 2: High Personality Contenders */
+  --font-dela: "Dela Gothic One", cursive;
+  --font-syncopate: "Syncopate", sans-serif;
+  --font-krona: "Krona One", sans-serif;
+  --font-righteous: "Righteous", cursive;
 }
 
 :root {
-  font-family: var(--font-body);
+  font-family: var(--font-sk); /* Set default to Sk-Modernist as requested */
+  scroll-behavior: smooth;
   line-height: 1.5;
   font-weight: 400;
 
@@ -41,4 +98,127 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-headline);
+}
+
+/* Explicit Overrides for Font Lab */
+.font-akony { font-family: var(--font-akony) !important; }
+.font-blackbird { font-family: var(--font-blackbird) !important; }
+.font-sk { font-family: var(--font-sk) !important; }
+.font-gyst { font-family: var(--font-gyst) !important; }
+
+/* New Recommendations */
+.font-syne { font-family: var(--font-syne) !important; }
+.font-space { font-family: var(--font-space) !important; }
+.font-michroma { font-family: var(--font-michroma) !important; }
+.font-unbounded { font-family: var(--font-unbounded) !important; }
+
+/* Round 2: New Contenders */
+.font-dela { font-family: var(--font-dela) !important; }
+.font-syncopate { font-family: var(--font-syncopate) !important; }
+.font-krona { font-family: var(--font-krona) !important; }
+.font-righteous { font-family: var(--font-righteous) !important; }
+
+/* Premium Button Animation (btn-17 Refactor) */
+.btn-anim {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-brand-text);
+  color: #fff;
+  border-radius: 99rem;
+  border: 2px solid var(--color-brand-text);
+  cursor: pointer;
+  z-index: 0;
+}
+
+.btn-anim .text-container {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  mix-blend-mode: difference;
+  z-index: 10;
+}
+
+.btn-anim .text {
+  display: block;
+  position: relative;
+}
+
+.btn-anim:hover .text {
+  animation: move-up-alternate 0.3s forwards;
+}
+
+@keyframes move-up-alternate {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(80%); }
+  51% { transform: translateY(-80%); }
+  100% { transform: translateY(0); }
+}
+
+.btn-anim:after,
+.btn-anim:before {
+  --skew: 0.2;
+  background: #fff;
+  content: "";
+  display: block;
+  height: 102%;
+  left: calc(-50% - 50% * var(--skew));
+  pointer-events: none;
+  position: absolute;
+  top: -104%;
+  transform: skew(calc(150deg * var(--skew))) translateY(var(--progress, 0));
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  width: 100%;
+}
+
+.btn-anim:after {
+  --progress: 0%;
+  left: calc(50% + 50% * var(--skew));
+  top: 102%;
+  z-index: -1;
+}
+
+.btn-anim:hover:before {
+  --progress: 100%;
+}
+
+.btn-anim:hover:after {
+  --progress: -102%;
+}
+
+/* Outline Button Animation */
+.btn-outline-anim {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-brand-text);
+  color: var(--color-brand-text);
+  z-index: 1;
+  transition: color 0.5s;
+}
+
+.btn-outline-anim:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--color-brand-action);
+  height: 150px;
+  width: 200px;
+  border-radius: 50%;
+  border-color: #fff;
+  top: 100%;
+  left: 100%;
+  transition: all 0.7s;
+}
+
+.btn-outline-anim:hover {
+  color: #fff;
+}
+
+.btn-outline-anim:hover:before {
+  top: -30px;
+  left: -30px;
+}
+
+.btn-outline-anim:active:before {
+  background: var(--color-brand-action);
+  transition: background 0s;
 }

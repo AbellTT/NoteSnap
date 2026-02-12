@@ -240,20 +240,70 @@ const RobotPractice = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-brand-bg p-10 md:grid md:grid-cols-2 gap-10">
-      <div className="order-1 flex flex-col items-center md:items-start text-center md:text-left">
-        <h1 className="text-3xl font-black mb-10 text-brand-text">Animation Practice</h1>
-        <p className="text-gray-500 font-medium italic">
-          The robot is now reading multiple words! Watch him switch focus.
+      <div className="order-1 flex flex-col items-center md:items-start text-center md:text-left h-full overflow-y-auto pr-4 custom-scrollbar">
+        <h1 className="text-4xl font-sk font-black mb-2 text-brand-text">The Font Lab</h1>
+        <p className="text-gray-500 font-medium italic mb-8">
+          Sk-Modernist is locked for body text. Let's find its perfect bold partner.
         </p>
-        <div className="mt-6 text-sm text-gray-400 space-y-2">
-          <p>💡 Tip: Every 3 seconds, he'll "blink" and look at the other word.</p>
-        </div>
 
-        {/* Isolated Test Word */}
-        <div className="test-word-float mt-12 bg-white border-2 border-brand-action/20 px-6 py-2 rounded-2xl shadow-sm text-xl font-bold text-brand-action will-change-transform">
-          Pure Motion Test
+        <div className="space-y-10 w-full max-w-sm pb-10">
+          {/* Category: The Originals */}
+          <section>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4 px-1">From Your Assets</h3>
+            <div className="space-y-4">
+              <div className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:border-brand-action transition-all group">
+                <h2 className="text-2xl font-akony mb-1">AKONY</h2>
+                <p className="font-sk text-xs text-gray-500">Futuristic, stencil, hi-tech. (Currently on Robot)</p>
+              </div>
+              <div className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:border-brand-action transition-all">
+                <h2 className="text-2xl font-blackbird mb-1">BLACKBIRD</h2>
+                <p className="font-sk text-xs text-gray-500">Geometric, sharp, and architectural.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Category: New Contenders */}
+          <section>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-action mb-4 px-1">High Personality Options</h3>
+            <div className="space-y-4">
+              <div className="p-5 bg-brand-soft-gray border-2 border-brand-action/10 rounded-2xl shadow-sm hover:border-brand-action transition-all">
+                <h2 className="text-3xl font-dela mb-1 font-bold">NOTESNAP</h2>
+                <p className="font-sk text-xs text-brand-action font-black uppercase tracking-widest mb-2">The "Manga Tech" Soul</p>
+                <p className="font-sk text-sm text-gray-700 leading-relaxed">
+                  Dela Gothic One is ultra-thick and expressive. It feels like a high-energy robot from a futuristic comic.
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:border-brand-action transition-all">
+                <h2 className="text-2xl font-syncopate font-bold mb-1 tracking-wider">SYNCOPATE</h2>
+                <p className="font-sk text-xs text-gray-400 font-bold uppercase tracking-widest mb-2">The "Wide-Screen" Soul</p>
+                <p className="font-sk text-sm text-gray-700 leading-relaxed">
+                  Syncopate is ultra-wide. It feels cinematic, sophisticated, and pure sci-fi.
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:border-brand-action transition-all">
+                <h2 className="text-2xl font-righteous mb-1">Righteous</h2>
+                <p className="font-sk text-xs text-gray-400 font-bold uppercase tracking-widest mb-2">The "Retro Tech" Soul</p>
+                <p className="font-sk text-sm text-gray-700 leading-relaxed">
+                  Unique rounded-square curves. It has a charming "Art Deco meets AI" personality.
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-black/5 rounded-2xl shadow-sm hover:border-brand-action transition-all">
+                <h2 className="text-2xl font-krona mb-1 uppercase tracking-tight">KRONICS</h2>
+                <p className="font-sk text-xs text-gray-400 font-bold uppercase tracking-widest mb-2">The "Minimalist Future" Soul</p>
+                <p className="font-sk text-sm text-gray-700 leading-relaxed">
+                  Krona One is wide and sleek. Very low contrast, giving it a very solid and balanced robotic energy.
+                </p>
+              </div>
+            </div>
+          </section>
+        <div className="mt-8 text-xs text-gray-400">
+          💡 The robot is currently using **Dela Gothic + Sk-Modernist**.
         </div>
       </div>
+    </div>
       
       <div className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 border border-black/5 shadow-sm flex flex-col items-center justify-center relative">
         {/* Floating Sentence Words - Clustered above the head */}
