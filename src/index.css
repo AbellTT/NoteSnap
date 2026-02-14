@@ -246,8 +246,10 @@ h6 {
   transition: all 0.7s;
 }
 
-.btn-outline-anim:hover {
-  color: #fff;
+@media (hover: hover) {
+  .btn-outline-anim:hover {
+    color: #fff;
+  }
 }
 
 .btn-outline-anim:hover:before {
@@ -260,30 +262,92 @@ h6 {
   transition: background 0s;
 }
 
+/* 
+   Mobile Scaling Overrides (Below 640px)
+   We use media queries to boost the animation scale ONLY when 
+   buttons expand to full-width on mobile.
+*/
+@media (max-width: 639px) {
+  /* 1. Reset Complex Desktop Logic */
+  .btn-anim:before, .btn-anim:after,
+  .btn-outline-anim:before {
+    display: none !important;
+  }
+  
+  .btn-anim:hover .text {
+    animation: none; /* Disable text flip on mobile/tablet to avoid jitter */
+  }
+
+  /* 2. New Creative Mobile Effects (Tap-Based) */
+  
+  /* Primary Button: Shimmer & Scale */
+  .btn-anim {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .btn-anim:active {
+    transform: scale(0.96);
+    background-color: #4b5563; /* Subtle shift to gray-600 */
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+  }
+
+  /* Outline Button: Liquid Invert */
+  .btn-outline-anim {
+    position: relative;
+    background-color: transparent;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1;
+  }
+  
+  .btn-outline-anim:active {
+    background-color: var(--color-brand-action);
+    border-color: var(--color-brand-action);
+    color: #fff !important; /* Force white during press */
+    transform: scale(0.98);
+  }
+}
+
+/* Scrollbar Hider Utility */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
 /* --- Responsive Navigation & Hamburger --- */
 
-/* Hamburger Toggle Container */
+/* 
+   Hamburger Toggle Container 
+   Layered at z-200 to stay above everything else, ensuring the 'X' 
+   is always visible and clickable on top of the drawer.
+*/
+/* 
+   Hamburger Toggle Container 
+*/
 .nav-toggle {
   position: relative;
   width: 40px;
   height: 40px;
   cursor: pointer;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Individual bars */
+/* 
+   Individual bars - All absolute for centered rotation 
+*/
 .nav-toggle .bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   height: 3px;
   background-color: var(--color-brand-text);
   border-radius: 4px;
-  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-.nav-toggle .bar:nth-child(1),
-.nav-toggle .bar:nth-child(3) {
-  width: 75%;
-}
+/* Resting positions (Slightly asymmetric widths as requested previously) */
+.nav-toggle .bar:nth-child(1) { top: 12px; width: 75%; }
+.nav-toggle .bar:nth-child(2) { top: 20px; width: 100%; }
+.nav-toggle .bar:nth-child(3) { top: 28px; width: 75%; }
 
 /* Active State (X-Transformation) */
 .nav-toggle.is-open {
@@ -292,20 +356,25 @@ h6 {
 
 .nav-toggle.is-open .bar:nth-child(2) {
   opacity: 0;
-  transform: scaleX(0);
+  transform: translate(-50%, 0) scaleX(0);
 }
 
 .nav-toggle.is-open .bar:nth-child(1) {
   width: 100%;
-  transform: rotate(45deg) translate(8px, 8px);
+  top: 20px; /* Animate to center */
+  transform: translate(-50%, 0) rotate(45deg);
 }
 
 .nav-toggle.is-open .bar:nth-child(3) {
   width: 100%;
-  transform: rotate(-45deg) translate(8px, -8px);
+  top: 20px; /* Animate to center */
+  transform: translate(-50%, 0) rotate(-45deg);
 }
 
-/* Mobile Drawer Overlay */
+/* 
+   Mobile Drawer Overlay 
+   Stacked at z-150 (below toggle, above backdrop).
+*/
 .mobile-drawer {
   position: fixed;
   top: 0;
@@ -318,18 +387,33 @@ h6 {
   box-shadow: -10px 0 50px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  padding: 80px 40px;
-  z-index: 100;
-  transform: translateX(100%); /* Start hidden */
+  padding: clamp(80px, 15vh, 120px) 40px 40px; 
+  z-index: 150;
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Backdrop */
+/* Fix for small/short mobile screens (Ensures links don't overflow) */
+@media (max-height: 700px) {
+  .mobile-drawer {
+    padding-top: 80px;
+    padding-bottom: 20px;
+  }
+  .mobile-drawer ul {
+    gap: 0.5rem;
+  }
+  .mobile-drawer a {
+    font-size: 1.25rem;
+  }
+}
+
+/* Backdrop Overlay */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
-  z-index: 90;
+  z-index: 140;
   opacity: 0;
   pointer-events: none;
 }

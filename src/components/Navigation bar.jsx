@@ -17,9 +17,9 @@ const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
+  const NavBarRef= useRef(null);
 
   // --- LOGIC: Scroll Detection ---
-  // We detect if the user has scrolled more than 20px to shrink the navbar
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -27,15 +27,12 @@ const NavigationBar = () => {
   }, []);
 
   // --- GSAP: Mobile Menu Animation ---
-  // We use GSAP to slide the drawer in from the right and fade the backdrop
   useEffect(() => {
     if (isOpen) {
-      // Open Timeline
       const tl = gsap.timeline();
       tl.to(backdropRef.current, { opacity: 1, pointerEvents: 'auto', duration: 0.3 })
         .to(drawerRef.current, { x: 0, duration: 0.5, ease: "power3.out" }, "-=0.2");
     } else {
-      // Close Timeline
       const tl = gsap.timeline();
       tl.to(drawerRef.current, { x: '100%', duration: 0.4, ease: "power3.in" })
         .to(backdropRef.current, { opacity: 0, pointerEvents: 'none', duration: 0.3 }, "-=0.2");
@@ -49,26 +46,29 @@ const NavigationBar = () => {
   ];
 
   return (
-    <>
+    <div className="relative">
       {/* 
-          Main Nav: 
-          Uses dynamic height (h-20 default vs h-16 scrolled) and 
-          background transparency for a premium feel.
+          1. MAIN NAVIGATION LAYER (Lower Z-Index)
+          - z-50 ensures it is occluded (covered) by the backdrop and drawer.
+          - Contains all visual branding and desktop interaction.
       */}
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 w-full z-[50] transition-all duration-300 ${
         scrolled 
-          ? 'bg-brand-bg/90 backdrop-blur-lg border-b border-black/5 h-16 shadow-sm' 
+          ? 'bg-brand-bg/50 backdrop-blur-lg border-b border-black/5 h-16 shadow-sm' 
           : 'bg-transparent h-20'
       }`}>
         <div className="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-between">
           
           {/* LOGO SECTION */}
           <div 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-3 group cursor-pointer z-[110]"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setIsOpen(false);
+            }}
+            className="flex items-center gap-3 group cursor-pointer"
           >
             <img src={logo} alt="NoteSnap Logo" className="h-10 w-auto transition-transform group-hover:scale-110" />
-            <span className={`text-2xl font-dela tracking-tight transition-colors ${scrolled ? 'text-brand-text' : 'text-brand-text'}`}>
+            <span className="text-2xl font-dela tracking-tight transition-colors text-brand-text">
               NoteSnap
             </span>
           </div>
@@ -86,63 +86,82 @@ const NavigationBar = () => {
             ))}
           </div>
 
-          {/* HEADER ACTIONS (Desktop CTA + Mobile Hamburger) */}
+          {/* HEADER ACTIONS */}
           <div className="flex items-center gap-6">
             <Button variant="primary" className="hidden sm:flex text-base px-2.5 py-1">
               Try Free
             </Button>
-
-            {/* CUSTOM HAMBURGER TOGGLE */}
-            <div 
-              className={`nav-toggle flex md:hidden flex-col items-center justify-center gap-2 z-[120] ${isOpen ? 'is-open' : ''}`}
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <div className="bar" id="bar1" />
-              <div className="bar" id="bar2" />
-              <div className="bar" id="bar3" />
-            </div>
+            
+            {/* 
+                LAYOUT SPACER
+                - Invisible on desktop, maintains symmetry on mobile since 
+                  the actual toggle is positioned in the secondary layer.
+            */}
+            <div className="w-[40px] md:hidden" aria-hidden="true" />
           </div>
         </div>
       </nav>
 
-      {/* MOBILE DRAWER BACKDROP */}
+      {/* 
+          2. INVISIBLE INTERACTION LAYER (Highest Z-Index)
+          - Fixed at z-210 so the toggle stays on top of the drawer (z-150).
+          - Uses 'pointer-events-none' to let clicks pass through to the nav links below.
+          - But the toggle itself has 'pointer-events-auto' so you can open/close the menu.
+          - Replicates the h-20/h-16 height for perfect alignment during scroll.
+      */}
+      <div className={`fixed top-0 left-0 w-full z-[210] pointer-events-none transition-all duration-300 ${
+        scrolled ? 'h-16' : 'h-20'
+      }`}>
+        <div className="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-end">
+          <div 
+            className={`nav-toggle md:hidden pointer-events-auto ${isOpen ? 'is-open' : ''}`}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="bar" id="bar1" />
+            <div className="bar" id="bar2" />
+            <div className="bar" id="bar3" />
+          </div>
+        </div>
+      </div>
+
+      {/* 3. MOBILE DRAWER COMPONENTS (Layered in between) */}
       <div 
         ref={backdropRef}
         onClick={() => setIsOpen(false)}
         className="drawer-backdrop md:hidden"
       />
 
-      {/* MOBILE DRAWER CONTENT */}
       <div ref={drawerRef} className="mobile-drawer md:hidden">
-        <ul className="flex flex-col gap-8 mb-12">
-          {navLinks.map(([label, href], i) => (
-            <li key={label}>
-              <a 
-                href={href}
-                onClick={() => setIsOpen(false)}
-                className="text-4xl font-dela text-brand-text hover:text-brand-action transition-colors block"
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="flex-1 overflow-y-auto no-scrollbar py-4">
+          <ul className="flex flex-col gap-6 mb-8">
+            {navLinks.map(([label, href]) => (
+              <li key={label}>
+                <a 
+                  href={href}
+                  onClick={() => setIsOpen(false)}
+                  className="text-2xl font-dela text-brand-text hover:text-brand-action transition-colors block"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* DRAWER CTA */}
-        <Button 
-          variant="primary" 
-          onClick={() => setIsOpen(false)}
-          className="w-full py-4 text-xl"
-        >
-          Get Started Free
-        </Button>
+          <Button 
+            variant="primary" 
+            onClick={() => setIsOpen(false)}
+            className="w-full py-3 text-xl mb-8"
+          >
+            Get Started Free
+          </Button>
+        </div>
 
-        {/* DECORATIVE ELEMENT */}
-        <div className="mt-auto opacity-20 text-xs font-sk tracking-widest uppercase">
+        {/* Branding placeholder */}
+        <div className="mt-auto pt-6 opacity-20 text-xs font-sk tracking-widest uppercase border-t border-black/5">
           NoteSnap © 2024
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

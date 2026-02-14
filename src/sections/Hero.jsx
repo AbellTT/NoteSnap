@@ -3,9 +3,14 @@ import Button from '../components/Button';
 import Robot from '../components/Robot';
 import gsap from 'gsap';
 
+import { FlipWords } from '../components/flipwords';
+
 const Hero = () => {
   const sentence = "Tame the into every Turn note chaos. clarity.".split(" ");
+  
   //actual sentence : Tame the chaos. Turn every note into clarity.
+  
+  const flipWords = ["Clean.", "Sharp.", "Smart.", "Organized."];
   useEffect(() => {
     // --- ANIMATION 1: BLINKING ---
     const blinkTimeline = gsap.timeline({
@@ -155,29 +160,21 @@ const Hero = () => {
 
     }, 4000);
 
-    // --- ANIMATION 4: FLOATING WORDS (Randomized) ---
-    const floatingWords = document.querySelectorAll('.floating-word');
-    floatingWords.forEach((word) => {
-      // Randomize duration between 2 and 4 seconds
-      const duration = 2 + Math.random() * 2;
-      // Randomize delay so they don't all start at once
-      const delay = Math.random() * 2;
-      // Randomize movement range
-      const yMove = -20 - Math.random() * 20; // Move up between 20px and 40px
-      const xMove = Math.random() * 40 - 20;  // Move sideways between -20px and 20px
-
-      gsap.to(word, {
-        y: yMove,
-        x: xMove,
+    // --- ANIMATION 4: FLOATING WORDS (Right Side) ---
+    gsap.to('.floating-word', {
+      y: -30,
         z: 0.1,                          // Anti-jitter hint
-        duration: duration,
-        delay: delay,
+      x: () => Math.random() * 40 - 20,
+      duration: 2,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut",
         force3D: true, 
-        autoRound: false
-      });
+      autoRound: false,                // Sub-pixel precision
+      stagger: {
+        amount: 1,
+        from: "start" 
+      }
     });
 
     // --- ANIMATION 5: HAND-TO-CHIN ---
@@ -249,31 +246,33 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-brand-bg">
-      <div className="max-w-[1440px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-[calc(100vh-5rem)] py-20">
+      <div className="max-w-[1440px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)] py-20">
         
         {/* Left Side: Content */}
-        <div className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10">
-          <h1 className="text-5xl md:text-8xl font-dela leading-[1.1] mb-6 flex flex-col tracking-tight">
-            <span className="text-brand-text">Your notes.</span>
-            <span className="text-brand-action">Clean.</span>
+        <div className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10 transition-all duration-500">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl min-[1150px]:text-[5rem] xl:text-8xl font-dela leading-[1.1] mb-6 flex flex-col items-center md:items-start tracking-tight transition-all duration-500">
+            <span className="text-brand-text">Your notes.</span>  
+            <div className="h-[1.1em] overflow-visible flex items-center justify-center md:justify-start">
+              <FlipWords words={flipWords} className="text-brand-action p-0 md:-ml-2" duration={2500} />
+            </div>
             <span className="text-brand-text">Instantly.</span>
           </h1>
           
-          <p className="max-w-md text-gray-500 font-sk text-lg md:text-xl leading-relaxed mb-10 transition-all">
+          <p className="max-w-md text-gray-500 font-sk text-lg md:text-xl lg:text-2xl leading-relaxed mb-10 transition-all duration-500">
             Turn messy hand-written scribbles into clear, structured, and actionable summaries in seconds.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto transition-all">
             <Button 
               variant="primary" 
-              className="px-3 py-2 text-lg"
+              className="px-4 py-2 text-lg lg:text-xl"
               icon={<span> →</span>}
             >
               Get Started
             </Button>
             <Button 
               variant="outline" 
-              className="px-6 py-3 text-base"
+              className="px-6 py-3 text-base lg:text-lg"
             >
               View Demo
             </Button>
@@ -281,30 +280,30 @@ const Hero = () => {
         </div>
 
         {/* Right Side: Robot Animation */}
-        <div className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative">
+        <div className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 lg:p-14 min-[1150px]:p-16 lg:pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative overflow-hidden transition-all duration-500">
         {/* Floating Sentence Words - Clustered above the head */}
         {sentence.map((word, index) => (
           <div 
             key={index}
-            className="floating-word absolute bg-white/90 border border-black/10 px-4 py-1.5 rounded-xl shadow-sm text-lg font-bold z-10 will-change-transform"
+            className="floating-word absolute bg-white/90 border border-black/10 px-3 py-2 md:px-2.5 md:py-1 lg:px-4 lg:py-2 rounded-xl shadow-sm text-sm md:text-sm lg:text-lg min-[1150px]:text-[1.1rem] xl:text-xl z-10 will-change-transform min-[566px]:max-md:scale-110"
             style={{
-              // Spreading them out more:
-              // top: increased range (5-30%) and spread
-              // left: increased distribution (10-90%)
-              top: `${8 + (index * 8) % 25}%`,       
-              left: `${10 + (index * 17) % 85}%`,
+              top: `${5 + (index * 7) % 25}%`,       
+              left: `${10 + (index * 15) % 80}%`,
             }}
           >
             {word}
           </div>
         ))}
 
-        <Robot id="practice-robot" className="w-full h-full max-h-[440px] max-w-[300px]" />
+        <Robot 
+          id="practice-robot" 
+          className="w-full h-[70%] md:h-[75%] lg:h-[70%] min-[1150px]:h-[95%] xl:h-full max-h-[300px] md:max-h-[320px] lg:max-h-[410px] min-[1150px]:max-h-[420px] xl:max-h-[440px] max-w-[200px] md:max-w-[230px] lg:max-w-[290px] min-[1150px]:max-w-[290px] xl:max-w-[300px] min-[566px]:max-md:scale-150 transition-all duration-700" 
+        />
       </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default Hero;
 
