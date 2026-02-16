@@ -417,3 +417,17 @@ h6 {
   opacity: 0;
   pointer-events: none;
 }
+
+/* Infinite Ticker Animation (Left to Right) */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}

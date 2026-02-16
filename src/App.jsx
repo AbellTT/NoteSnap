@@ -5,6 +5,7 @@ import RobotPractice from './RobotPractice'
 import Hero from './sections/Hero'
 import NavigationBar from './components/Navigation bar'
 import GridBackground from './components/GridBackground'
+import Features from './sections/Features'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,6 +17,7 @@ function App() {
       <GridBackground />
       <NavigationBar />
       <Hero />
+      <Features/>
     </main>
   )
 }

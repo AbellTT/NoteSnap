@@ -5,6 +5,7 @@ import gsap from 'gsap';
 
 import { FlipWords } from '../components/flipwords';
 import SplitText from '../components/SplitText';
+import InfiniteTicker from '../components/InfiniteTicker';
 
 const Hero = () => {
   const sentence = "Tame the into every Turn note chaos. clarity.".split(" ");
@@ -13,6 +14,7 @@ const Hero = () => {
   // --- REFS: Entrance Animations ---
   const heroContentRef = useRef(null);     // Left side (Text)
   const robotContainerRef = useRef(null); // Right side (Robot Pod)
+  const tickerRef = useRef(null);         // Bottom ticker
   const flipWords = ["Clean.", "Sharp.", "Smart.", "Organized."];
   useEffect(() => {
     // --- ANIMATION 1: BLINKING ---
@@ -53,6 +55,13 @@ const Hero = () => {
         { xPercent: 30, scale: 0.95, opacity: 0 }, 
         { xPercent: 0, scale: 1, opacity: 1, clearProps: "all" }, // clearProps restores CSS responsiveness
         0.1 // Slight organic offset
+      );
+
+      // 3. Ticker fades up from bottom
+      entranceTl.fromTo(tickerRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
+        0.6 // Start after main content begins
       );
     });
     // --- ANIMATION : MOUSE TRACKING ---
@@ -270,65 +279,73 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)] py-20">
-        
-        {/* Left Side: Content (Slides from Left) */}
-        <div ref={heroContentRef} className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl min-[1150px]:text-[5rem] xl:text-8xl font-dela leading-[1.1] mb-6 flex flex-col items-center md:items-start tracking-tight">
-            <span className="text-brand-text">Your notes.</span>  
-            <div className="h-[1.1em] overflow-visible flex items-center justify-center md:justify-start">
-              <FlipWords words={flipWords} className="text-brand-action p-0 md:-ml-2" duration={2500} />
+    <section className="relative min-h-screen pt-20 flex flex-col overflow-hidden">
+      {/* Main Hero Content - Centered */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="max-w-[1440px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center py-5">
+          
+          {/* Left Side: Content (Slides from Left) */}
+          <div ref={heroContentRef} className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl min-[1150px]:text-[5rem] xl:text-8xl font-dela leading-[1.1] mb-6 flex flex-col items-center md:items-start tracking-tight">
+              <span className="text-brand-text">Your notes.</span>  
+              <div className="h-[1.1em] overflow-visible flex items-center justify-center md:justify-start">
+                <FlipWords words={flipWords} className="text-brand-action p-0 md:-ml-2" duration={2500} />
+              </div>
+              <span className="text-brand-text">Instantly.</span>
+            </h1>
+            
+            <SplitText 
+              text="Turn messy hand-written scribbles into clear, structured, and actionable summaries in seconds."
+              className="max-w-md text-gray-500 font-sk text-lg md:text-xl lg:text-2xl leading-relaxed mb-10 text-center md:text-left"
+              delay={20}
+              animationDelay={800}
+              duration={0.7}
+            />
+            
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Button 
+                variant="primary" 
+                className="px-4 py-2 text-lg lg:text-xl"
+                icon={<span> →</span>}
+              >
+                Get Started
+              </Button>
+              <Button 
+                variant="outline" 
+                className="px-6 py-3 text-base lg:text-lg"
+              >
+                View Demo
+              </Button>
             </div>
-            <span className="text-brand-text">Instantly.</span>
-          </h1>
-          
-          <SplitText 
-            text="Turn messy hand-written scribbles into clear, structured, and actionable summaries in seconds."
-            className="max-w-md text-gray-500 font-sk text-lg md:text-xl lg:text-2xl leading-relaxed mb-10 text-center md:text-left"
-            delay={20}
-            animationDelay={800}
-            duration={0.7}
+          </div>
+
+          {/* Right Side: Robot Animation (Slides from Right + Subtle Scale) */}
+          <div ref={robotContainerRef} className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 lg:p-14 min-[1150px]:p-16 lg:pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative overflow-hidden">
+          {/* Floating Sentence Words - Clustered above the head */}
+          {sentence.map((word, index) => (
+            <div 
+              key={index}
+              className="floating-word absolute bg-white/90 border border-black/10 px-3 py-2 md:px-2.5 md:py-1 lg:px-4 lg:py-2 rounded-xl shadow-sm text-sm md:text-sm lg:text-lg min-[1150px]:text-[1.1rem] xl:text-xl z-10 will-change-transform min-[566px]:max-md:scale-110"
+              style={{
+                top: `${5 + (index * 7) % 25}%`,       
+                left: `${10 + (index * 15) % 80}%`,
+              }}
+            >
+              {word}
+            </div>
+          ))}
+
+          <Robot 
+            id="practice-robot" 
+            className="w-full h-[70%] md:h-[75%] lg:h-[70%] min-[1150px]:h-[95%] xl:h-full max-h-[300px] md:max-h-[320px] lg:max-h-[410px] min-[1150px]:max-h-[420px] xl:max-h-[440px] max-w-[200px] md:max-w-[230px] lg:max-w-[290px] min-[1150px]:max-w-[290px] xl:max-w-[300px] min-[566px]:max-md:scale-150 transition-all duration-700" 
           />
-          
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <Button 
-              variant="primary" 
-              className="px-4 py-2 text-lg lg:text-xl"
-              icon={<span> →</span>}
-            >
-              Get Started
-            </Button>
-            <Button 
-              variant="outline" 
-              className="px-6 py-3 text-base lg:text-lg"
-            >
-              View Demo
-            </Button>
-          </div>
         </div>
-
-        {/* Right Side: Robot Animation (Slides from Right + Subtle Scale) */}
-        <div ref={robotContainerRef} className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 lg:p-14 min-[1150px]:p-16 lg:pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative overflow-hidden">
-        {/* Floating Sentence Words - Clustered above the head */}
-        {sentence.map((word, index) => (
-          <div 
-            key={index}
-            className="floating-word absolute bg-white/90 border border-black/10 px-3 py-2 md:px-2.5 md:py-1 lg:px-4 lg:py-2 rounded-xl shadow-sm text-sm md:text-sm lg:text-lg min-[1150px]:text-[1.1rem] xl:text-xl z-10 will-change-transform min-[566px]:max-md:scale-110"
-            style={{
-              top: `${5 + (index * 7) % 25}%`,       
-              left: `${10 + (index * 15) % 80}%`,
-            }}
-          >
-            {word}
-          </div>
-        ))}
-
-        <Robot 
-          id="practice-robot" 
-          className="w-full h-[70%] md:h-[75%] lg:h-[70%] min-[1150px]:h-[95%] xl:h-full max-h-[300px] md:max-h-[320px] lg:max-h-[410px] min-[1150px]:max-h-[420px] xl:max-h-[440px] max-w-[200px] md:max-w-[230px] lg:max-w-[290px] min-[1150px]:max-w-[290px] xl:max-w-[300px] min-[566px]:max-md:scale-150 transition-all duration-700" 
-        />
+        </div>
       </div>
+      
+      {/* Infinite Ticker at bottom of Hero */}
+      <div ref={tickerRef}>
+        <InfiniteTicker />
       </div>
     </section>
   );
