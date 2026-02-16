@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Button from '../components/Button';
 import Robot from '../components/Robot';
 import gsap from 'gsap';
 
 import { FlipWords } from '../components/flipwords';
+import SplitText from '../components/SplitText';
 
 const Hero = () => {
   const sentence = "Tame the into every Turn note chaos. clarity.".split(" ");
   
   //actual sentence : Tame the chaos. Turn every note into clarity.
-  
+  // --- REFS: Entrance Animations ---
+  const heroContentRef = useRef(null);     // Left side (Text)
+  const robotContainerRef = useRef(null); // Right side (Robot Pod)
   const flipWords = ["Clean.", "Sharp.", "Smart.", "Organized."];
   useEffect(() => {
     // --- ANIMATION 1: BLINKING ---
@@ -31,7 +34,28 @@ const Hero = () => {
         ease: "power2.inOut"
       });
 
-    // --- ANIMATION 2: MOUSE TRACKING ---
+    // --- GSAP: Optimized Symmetrical Entrance (Timeline) ---
+    let ctx = gsap.context(() => {
+      const entranceTl = gsap.timeline({
+        delay: 0.3,
+        defaults: { duration: 1.5, ease: "power4.out", force3D: true }
+      });
+
+      // 1. Text Content slides from LEFT
+      entranceTl.fromTo(heroContentRef.current, 
+        { xPercent: -30, opacity: 0 }, 
+        { xPercent: 0, opacity: 1 }, 
+        0 // Start at time 0
+      );
+
+      // 2. Robot Pod slides from RIGHT with SUBTLE SCALING
+      entranceTl.fromTo(robotContainerRef.current, 
+        { xPercent: 30, scale: 0.95, opacity: 0 }, 
+        { xPercent: 0, scale: 1, opacity: 1, clearProps: "all" }, // clearProps restores CSS responsiveness
+        0.1 // Slight organic offset
+      );
+    });
+    // --- ANIMATION : MOUSE TRACKING ---
     const handleMouseMove = (e) => {
       // Calculate cursor position relative to screen center (-0.5 to 0.5)
       let xPos = (e.clientX / window.innerWidth) - 0.5;
@@ -241,16 +265,17 @@ const Hero = () => {
       thinkingExpression.kill();
       gsap.ticker.remove(updateTracking);
       clearInterval(switchFocus);
+      ctx.revert();
     };
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-brand-bg">
+    <section className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)] py-20">
         
-        {/* Left Side: Content */}
-        <div className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10 transition-all duration-500">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl min-[1150px]:text-[5rem] xl:text-8xl font-dela leading-[1.1] mb-6 flex flex-col items-center md:items-start tracking-tight transition-all duration-500">
+        {/* Left Side: Content (Slides from Left) */}
+        <div ref={heroContentRef} className="order-2 md:order-1 flex flex-col items-center md:items-start text-center md:text-left z-10">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl min-[1150px]:text-[5rem] xl:text-8xl font-dela leading-[1.1] mb-6 flex flex-col items-center md:items-start tracking-tight">
             <span className="text-brand-text">Your notes.</span>  
             <div className="h-[1.1em] overflow-visible flex items-center justify-center md:justify-start">
               <FlipWords words={flipWords} className="text-brand-action p-0 md:-ml-2" duration={2500} />
@@ -258,11 +283,15 @@ const Hero = () => {
             <span className="text-brand-text">Instantly.</span>
           </h1>
           
-          <p className="max-w-md text-gray-500 font-sk text-lg md:text-xl lg:text-2xl leading-relaxed mb-10 transition-all duration-500">
-            Turn messy hand-written scribbles into clear, structured, and actionable summaries in seconds.
-          </p>
+          <SplitText 
+            text="Turn messy hand-written scribbles into clear, structured, and actionable summaries in seconds."
+            className="max-w-md text-gray-500 font-sk text-lg md:text-xl lg:text-2xl leading-relaxed mb-10 text-center md:text-left"
+            delay={20}
+            animationDelay={800}
+            duration={0.7}
+          />
           
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto transition-all">
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <Button 
               variant="primary" 
               className="px-4 py-2 text-lg lg:text-xl"
@@ -279,8 +308,8 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Side: Robot Animation */}
-        <div className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 lg:p-14 min-[1150px]:p-16 lg:pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative overflow-hidden transition-all duration-500">
+        {/* Right Side: Robot Animation (Slides from Right + Subtle Scale) */}
+        <div ref={robotContainerRef} className="order-2 w-full aspect-square bg-white rounded-[3rem] p-12 pb-0 lg:p-14 min-[1150px]:p-16 lg:pb-0 border border-black/5 shadow-sm flex flex-col items-center justify-end relative overflow-hidden">
         {/* Floating Sentence Words - Clustered above the head */}
         {sentence.map((word, index) => (
           <div 

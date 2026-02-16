@@ -8,7 +8,7 @@ import gsap from 'gsap';
  * 
  * Features:
  * 1. Scroll Detection: Changes height/opacity on scroll for a "sticky-glass" effect.
- * 2. Responsive Mobile Menu: GSAP-powered side drawer for mobile users.
+ * 2. Responsive Mobile Menu: GSAP-powered side drawer for mobile use+56y778yrs.
  * 3. Custom Hamburger: CSS-transformed bar animation (requested style).
  * 4. Smooth Anchor Links: Handles scrolling to #features, #process, etc.
  */
@@ -18,13 +18,34 @@ const NavigationBar = () => {
   const drawerRef = useRef(null);
   const backdropRef = useRef(null);
   const NavBarRef= useRef(null);
-
-  // --- LOGIC: Scroll Detection ---
+  const toggleContainerRef = useRef(null);
+  // --- LOGIC: Scroll Detection ---s
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // --- GSAP: Cinematic Entry Animation (Runs once on mount) ---
+  useEffect(() => {
+    // 1. Create a GSAP Context for clean-up (avoids double-animation in Dev mode)
+    let ctx = gsap.context(() => {
+      // Synchronize Entrance: Both Navbar and Toggle arrive together
+      gsap.fromTo([NavBarRef.current, toggleContainerRef.current], 
+        { yPercent: -100, opacity: 0 }, 
+        { 
+          yPercent: 0, 
+          opacity: 1, 
+          duration: 1.2, 
+          ease: "power4.out", 
+          delay: 0.2,
+          force3D: true // GPU acceleration
+        }
+      );
+    });
+    
+    return () => ctx.revert(); // Clean up animation when component unmounts
+  }, []); // Empty dependency array ensures this ONLY runs once on page load
 
   // --- GSAP: Mobile Menu Animation ---
   useEffect(() => {
@@ -52,11 +73,14 @@ const NavigationBar = () => {
           - z-50 ensures it is occluded (covered) by the backdrop and drawer.
           - Contains all visual branding and desktop interaction.
       */}
-      <nav className={`fixed top-0 left-0 w-full z-[50] transition-all duration-300 ${
-        scrolled 
-          ? 'bg-brand-bg/50 backdrop-blur-lg border-b border-black/5 h-16 shadow-sm' 
-          : 'bg-transparent h-20'
-      }`}>
+      <nav 
+        ref={NavBarRef}
+        className={`fixed top-0 left-0 w-full z-[50] transition-[height,background-color,backdrop-filter,border-color,box-shadow] duration-300 ${
+          scrolled 
+            ? 'bg-brand-bg/50 backdrop-blur-lg border-b border-black/5 h-16 shadow-sm' 
+            : 'bg-transparent h-20'
+          }`}
+      >
         <div className="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-between">
           
           {/* LOGO SECTION */}
@@ -109,9 +133,11 @@ const NavigationBar = () => {
           - But the toggle itself has 'pointer-events-auto' so you can open/close the menu.
           - Replicates the h-20/h-16 height for perfect alignment during scroll.
       */}
-      <div className={`fixed top-0 left-0 w-full z-[210] pointer-events-none transition-all duration-300 ${
+      <div 
+        ref={toggleContainerRef}
+        className={`fixed top-0 left-0 w-full z-[210] pointer-events-none transition-[height] duration-300 ${
         scrolled ? 'h-16' : 'h-20'
-      }`}>
+        }`}>
         <div className="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-end">
           <div 
             className={`nav-toggle md:hidden pointer-events-auto ${isOpen ? 'is-open' : ''}`}
@@ -132,7 +158,7 @@ const NavigationBar = () => {
       />
 
       <div ref={drawerRef} className="mobile-drawer md:hidden">
-        <div className="flex-1 overflow-y-auto no-scrollbar py-4">
+        <div className="flex-1 overflow-y-auto no-scrollbar">
           <ul className="flex flex-col gap-6 mb-8">
             {navLinks.map(([label, href]) => (
               <li key={label}>
