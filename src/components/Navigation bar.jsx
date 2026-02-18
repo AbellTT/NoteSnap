@@ -62,7 +62,7 @@ const NavigationBar = () => {
 
   const navLinks = [
     ['Features', '#features'],
-    ['How it Works', '#process'],
+    ['How it Works', '#how-it-works'],
     ['About', '#about'],
   ];
 

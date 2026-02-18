@@ -308,6 +308,11 @@ h6 {
 
 /* Scrollbar Hider Utility */
 @layer utilities {
+  .scroll-panel-gpu {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
@@ -430,4 +435,15 @@ h6 {
 
 .animate-scroll-left {
   animation: scroll-left 30s linear infinite;
+}
+
+/* AI Scanner Animation */
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Mockup Scaling Utilities */
+.mockup-container {
+  @apply relative rounded-2xl border border-black/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.15)] bg-white;
 }
