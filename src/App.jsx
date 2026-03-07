@@ -11,15 +11,18 @@ import Benefits from './sections/Benefits'
 import CTA from './sections/CTA'
 import Footer from './sections/Footer'
 import UIMockupLab from './UIMockupLab'
+import Preloader from './components/Preloader'
+import { useState } from 'react'
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const containerRef = useRef()
+  const [isLoading, setIsLoading] = useState(true);
   const isLab = new URLSearchParams(window.location.search).get('lab') === 'true';
 
   useEffect(() => {
-    if (isLab) return;
+    if (isLab || isLoading) return;
 
     // Initialize Lenis for smooth global scrolling with snappy settings
     const lenis = new Lenis({
@@ -39,21 +42,27 @@ function App() {
       lenis.destroy();
       gsap.ticker.remove(tickerFn);
     };
-  }, [isLab]);
+  }, [isLab, isLoading]);
 
   if (isLab) return <UIMockupLab />;
 
   return (
-    <main ref={containerRef} className="relative text-brand-text overflow-x-hidden min-h-screen selection:bg-brand-action selection:text-white bg-brand-bg">
-      <GridBackground />
-      <NavigationBar />
-      <Hero />
-      <ProblemPlusSolution/>
-      <HowItWorks id="how-it-works" />
-      <Benefits />
-      <CTA />
-      <Footer />
-    </main>
+    <>
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+      <main 
+        ref={containerRef} 
+        className={`relative text-brand-text overflow-x-hidden min-h-screen selection:bg-brand-action selection:text-white bg-brand-bg transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+      >
+        <GridBackground />
+        <NavigationBar />
+        <Hero />
+        <ProblemPlusSolution/>
+        <HowItWorks id="how-it-works" />
+        <Benefits />
+        <CTA />
+        <Footer />
+      </main>
+    </>
   )
 }
 
