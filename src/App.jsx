@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import RobotPractice from './RobotPractice'
+import Lenis from 'lenis'
 import Hero from './sections/Hero'
 import NavigationBar from './components/Navigation bar'
 import GridBackground from './components/GridBackground'
@@ -12,10 +12,34 @@ import CTA from './sections/CTA'
 import Footer from './sections/Footer'
 import UIMockupLab from './UIMockupLab'
 
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const containerRef = useRef()
   const isLab = new URLSearchParams(window.location.search).get('lab') === 'true';
+
+  useEffect(() => {
+    if (isLab) return;
+
+    // Initialize Lenis for smooth global scrolling with snappy settings
+    const lenis = new Lenis({
+      lerp: 0.08, 
+      wheelMultiplier: 1.5,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    // Synchronize Lenis scrolling with GSAP's ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    const tickerFn = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tickerFn);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(tickerFn);
+    };
+  }, [isLab]);
 
   if (isLab) return <UIMockupLab />;
 

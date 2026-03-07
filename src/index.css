@@ -76,7 +76,6 @@
 
 :root {
   font-family: var(--font-sk); /* Set default to Sk-Modernist as requested */
-  scroll-behavior: smooth;
   line-height: 1.5;
   font-weight: 400;
 
@@ -136,7 +135,7 @@ h6 {
 /* Round 2: New Contenders */
 .font-dela {
   font-family: var(--font-dela) !important;
-}
+}   
 .font-syncopate {
   font-family: var(--font-syncopate) !important;
 }

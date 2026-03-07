@@ -18,7 +18,7 @@ export const Stage1 = () => (
           <input 
             type="email" 
             placeholder="name@company.com"
-            className="w-full px-4 py-3 rounded-lg border-2 border-[#151515] font-sk focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 transition-all placeholder:text-gray-300"
+            className="w-full px-4 py-3 rounded-lg border-2 border-[#151515] font-sk focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 placeholder:text-gray-300"
           />
         </div>
         <div>
@@ -26,11 +26,11 @@ export const Stage1 = () => (
           <input 
             type="password" 
             placeholder="••••••••"
-            className="w-full px-4 py-3 rounded-lg border-2 border-[#151515] font-sk focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 transition-all placeholder:text-gray-300"
+            className="w-full px-4 py-3 rounded-lg border-2 border-[#151515] font-sk focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 placeholder:text-gray-300"
           />
         </div>
         
-        <button className="w-full bg-[#3B82F6] text-white font-dela py-4 rounded-lg hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20 active:scale-[0.98]">
+        <button className="w-full bg-[#3B82F6] text-white font-dela py-4 rounded-lg hover:bg-blue-600 shadow-lg shadow-blue-500/20 active:scale-[0.98]">
           Join NoteSnap
         </button>
         
@@ -40,7 +40,7 @@ export const Stage1 = () => (
           <div className="flex-grow border-t border-gray-100"></div>
         </div>
         
-        <button className="w-full bg-white border-2 border-gray-100 text-[#151515] font-sk font-bold py-3 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors">
+        <button className="w-full bg-white border-2 border-gray-100 text-[#151515] font-sk font-bold py-3 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50">
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -57,9 +57,9 @@ export const Stage1 = () => (
 // --- STAGE 2: CAPTURE CHAOS ---
 export const Stage2 = () => (
   <div className="w-full h-full bg-[#FDFDFD] flex flex-col p-20 relative">
-    <div className="flex-grow flex flex-col items-center justify-center border-4 border-dashed border-[#3B82F6]/30 rounded-3xl bg-blue-50/20 group hover:bg-blue-50/40 transition-colors cursor-pointer relative">
-      <img src={MASCOT_PATH} alt="Mascot" className="absolute top-8 right-8 w-20 h-20 grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
-      <div className="bg-[#3B82F6] w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/30 mb-6 animate-bounce">
+    <div className="flex-grow flex flex-col items-center justify-center border-4 border-dashed border-[#3B82F6]/30 rounded-3xl bg-blue-50/20 group cursor-pointer relative">
+      <img src={MASCOT_PATH} alt="Mascot" className="absolute top-8 right-8 w-20 h-20 grayscale opacity-20" />
+      <div className="bg-[#3B82F6] w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg mb-6">
         <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
         </svg>
@@ -71,12 +71,12 @@ export const Stage2 = () => (
     <div className="mt-12">
       <h3 className="font-sk font-bold text-[#151515] mb-6 uppercase tracking-widest text-sm flex items-center gap-3">
         Recent Chaos
-        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
       </h3>
       <div className="grid grid-cols-4 gap-6">
         {[1, 2, 3, 4].map(i => (
           <div key={i} className="aspect-[4/5] bg-gray-100 rounded-xl border border-gray-200 overflow-hidden relative group">
-            <div className="absolute inset-0 bg-[#3B82F6]/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className="absolute inset-0 bg-[#3B82F6]/10 opacity-0 flex items-center justify-center">
                <span className="font-dela text-[#3B82F6] text-xs">Processing...</span>
             </div>
             {/* Minimalist "messy note" pattern */}
@@ -97,9 +97,9 @@ export const Stage2 = () => (
 // --- STAGE 3: AI MAGIC ---
 export const Stage3 = () => (
   <div className="w-full h-full bg-[#FDFDFD] flex p-10 gap-10">
-    <div className="flex-grow flex flex-col bg-[#151515] rounded-2xl overflow-hidden relative border border-gray-800 shadow-2xl">
-      {/* Scanning Bar Animation */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-[#3B82F6] shadow-[0_0_20px_#3B82F6] z-30 animate-[scan_4s_infinite_linear]"></div>
+    <div className="flex-grow flex flex-col bg-[#151515] rounded-2xl overflow-hidden relative border border-gray-800 shadow-xl">
+      {/* Scanning Bar Animation (Static) */}
+      <div className="absolute top-1/2 left-0 w-full h-1 bg-[#3B82F6] shadow-[0_0_15px_#3B82F6] z-30 opacity-40"></div>
       
       {/* Content Transformation */}
       <div className="flex h-full font-sk">
@@ -135,8 +135,8 @@ export const Stage3 = () => (
       </div>
       
       {/* Overlay Status */}
-      <div className="absolute bottom-6 right-6 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-3">
-        <div className="w-2 h-2 rounded-full bg-[#3B82F6] animate-pulse"></div>
+      <div className="absolute bottom-6 right-6 px-4 py-2 bg-[#151515] rounded-full border border-white/10 flex items-center gap-3 shadow-lg">
+        <div className="w-2 h-2 rounded-full bg-[#3B82F6]"></div>
         <span className="text-xs font-bold text-white uppercase tracking-widest leading-none">AI Insight Active</span>
       </div>
     </div>
@@ -174,14 +174,14 @@ export const Stage4 = () => (
         </div>
       </div>
       
-      <div className="mt-auto opacity-20 hover:opacity-100 transition-opacity">
+      <div className="mt-auto opacity-20 hover:opacity-100">
         <div className="h-6 w-full bg-gray-200 rounded-md mb-2"></div>
         <div className="h-6 w-2/3 bg-gray-200 rounded-md"></div>
       </div>
     </div>
 
     {/* Main Editor */}
-    <div className="flex-grow p-16 font-sk overflow-y-auto no-scrollbar">
+    <div className="flex-grow p-16 font-sk overflow-hidden">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-5xl font-dela text-[#151515] mb-4">Meeting Insights</h1>
         <div className="flex items-center gap-4 mb-12 py-4 border-y border-gray-100">
@@ -200,7 +200,7 @@ export const Stage4 = () => (
                 "Phase out physical whiteboards by Q4",
                 "Integrate with current Slack/Notion workflow"
               ].map(item => (
-                <li key={item} className="flex items-start gap-4 p-4 bg-gray-50/50 rounded-xl group transition-all hover:bg-[#3B82F6]/5 hover:translate-x-1">
+                <li key={item} className="flex items-start gap-4 p-4 bg-gray-50/50 rounded-xl group hover:bg-[#3B82F6]/5 hover:translate-x-1">
                   <div className="w-6 h-6 rounded-md bg-white border border-gray-200 flex items-center justify-center text-[#3B82F6]">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
                   </div>
@@ -213,7 +213,7 @@ export const Stage4 = () => (
           <section>
             <h2 className="text-[#151515] font-dela text-xl mb-6">Next Actions</h2>
             <div className="p-8 bg-brand-text rounded-2xl text-white relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-[#3B82F6]/20 rounded-full -mr-10 -mt-10 blur-3xl"></div>
+               <div className="absolute top-0 right-0 w-32 h-32 bg-[#3B82F6]/10 rounded-full -mr-10 -mt-10"></div>
                <p className="text-2xl font-sk font-bold mb-4 italic opacity-95">"The future belongs to the organized."</p>
                <p className="text-sm opacity-60 font-medium">Auto-summarized by NoteSnap AI</p>
             </div>
@@ -251,7 +251,7 @@ export const Stage5 = () => (
     </div>
 
     {/* Main Gallery */}
-    <div className="flex-grow p-12 overflow-y-auto no-scrollbar">
+    <div className="flex-grow p-12 overflow-hidden">
       {/* Search Bar */}
       <div className="max-w-4xl mx-auto mb-12">
         <div className="relative">
@@ -261,10 +261,10 @@ export const Stage5 = () => (
           <input 
             type="text" 
             placeholder="Search your knowledge..." 
-            className="w-full pl-16 pr-6 py-5 bg-white rounded-2xl border-2 border-gray-100 font-sk focus:border-[#3B82F6] outline-none shadow-sm text-lg transition-all"
+            className="w-full pl-16 pr-6 py-5 bg-white rounded-2xl border-2 border-gray-100 font-sk focus:border-[#3B82F6] outline-none shadow-sm text-lg"
           />
           <div className="absolute inset-y-0 right-6 flex items-center">
-             <div className="w-[3px] h-6 bg-[#3B82F6] animate-pulse"></div>
+             <div className="w-[3px] h-6 bg-[#3B82F6]"></div>
           </div>
         </div>
       </div>
@@ -278,8 +278,8 @@ export const Stage5 = () => (
           { title: 'Project X', count: 5, color: 'bg-red-500' },
           { title: 'Archive', count: 128, color: 'bg-gray-500' },
         ].map((card, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl border-2 border-gray-100 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all group cursor-pointer">
-            <div className={`w-12 h-12 ${card.color} rounded-xl mb-6 shadow-lg opacity-80 group-hover:opacity-100 transition-opacity`}></div>
+          <div key={i} className="bg-white p-6 rounded-2xl border-2 border-gray-100 shadow-sm hover:shadow-xl hover:translate-y-[-4px] group cursor-pointer">
+            <div className={`w-12 h-12 ${card.color} rounded-xl mb-6 shadow-lg opacity-80 group-hover:opacity-100`}></div>
             <h4 className="font-dela text-[#151515] text-lg mb-1">{card.title}</h4>
             <p className="font-sk text-gray-400 font-bold text-xs uppercase tracking-widest">{card.count} Items</p>
           </div>
@@ -291,14 +291,9 @@ export const Stage5 = () => (
 
 // --- STAGE 6: EXPORT MODAL ---
 export const Stage6 = () => (
-  <div className="w-full h-full bg-[#FDFDFD] flex items-center justify-center relative">
-    {/* Blurred Dashboard Background */}
-    <div className="absolute inset-0 grayscale opacity-10 pointer-events-none scale-110">
-      <Stage5 />
-    </div>
-    
+  <div className="w-full h-full bg-[#f5f5f5] flex items-center justify-center relative">
     {/* Modal */}
-    <div className="w-full max-w-lg bg-white rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.15)] border border-gray-100 p-10 z-10 scale-110">
+    <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-gray-100 p-10 z-10 scale-110">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-dela text-[#151515] tracking-tight">Export & Connect</h2>
         <div className="p-2 bg-gray-50 rounded-lg cursor-pointer">
@@ -312,7 +307,7 @@ export const Stage6 = () => (
           { name: 'Slack', icon: 'bg-[#4A154B]', status: 'Connected' },
           { name: 'Google Docs', icon: 'bg-[#4285F4]', status: 'Disconnected' },
         ].map(app => (
-          <div key={app.name} className="flex items-center justify-between p-4 border-2 border-gray-50 rounded-xl hover:border-[#3B82F6]/20 transition-colors">
+          <div key={app.name} className="flex items-center justify-between p-4 border-2 border-gray-50 rounded-xl">
             <div className="flex items-center gap-4">
               <div className={`w-10 h-10 ${app.icon} rounded-lg flex items-center justify-center text-white font-bold text-xs uppercase`}>
                 {app.name[0]}
@@ -326,24 +321,24 @@ export const Stage6 = () => (
             </div>
             
             {/* Toggle Switch */}
-            <div className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 cursor-pointer ${app.status === 'Connected' ? 'bg-[#3B82F6]' : 'bg-gray-100'}`}>
-               <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${app.status === 'Connected' ? 'translate-x-6' : 'translate-x-0'}`}></div>
+            <div className={`w-12 h-6 rounded-full p-1 cursor-pointer ${app.status === 'Connected' ? 'bg-[#3B82F6]' : 'bg-gray-100'}`}>
+               <div className={`w-4 h-4 bg-white rounded-full shadow-sm ${app.status === 'Connected' ? 'translate-x-6' : 'translate-x-0'}`}></div>
             </div>
           </div>
         ))}
       </div>
       
       <div className="flex gap-4">
-        <button className="flex-grow bg-[#3B82F6] text-white font-dela py-4 rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20 active:scale-[0.98]">
+        <button className="flex-grow bg-[#3B82F6] text-white font-dela py-4 rounded-xl shadow-lg shadow-blue-500/20">
           Export to Workspace
         </button>
-        <button className="px-6 border-2 border-gray-100 font-sk font-bold text-[#151515] rounded-xl hover:bg-gray-50 transition-colors">
+        <button className="px-6 border-2 border-gray-100 font-sk font-bold text-[#151515] rounded-xl hover:bg-gray-50">
           PDF
         </button>
       </div>
       
-      {/* Toast Success */}
-      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-full max-w-xs bg-brand-text text-white p-4 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+      {/* Toast Success (Static) */}
+      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-full max-w-xs bg-brand-text text-white p-4 rounded-xl shadow-xl flex items-center gap-3">
         <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
         </div>
@@ -383,7 +378,7 @@ const UIMockupLab = () => {
             <button
               key={stage.id}
               onClick={() => setActiveStage(stage.id)}
-              className={`w-full text-left px-4 py-3 rounded-lg font-bold transition-all ${
+              className={`w-full text-left px-4 py-3 rounded-lg font-bold${
                 activeStage === stage.id 
                   ? 'bg-brand-action text-white shadow-lg shadow-blue-500/20' 
                   : 'text-gray-500 hover:bg-gray-50'
@@ -423,7 +418,7 @@ const UIMockupLab = () => {
       {/* Exit Button */}
       <button 
         onClick={() => window.history.back()}
-        className="fixed top-6 right-6 bg-brand-text text-white w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl z-[10000]"
+        className="fixed top-6 right-6 bg-brand-text text-white w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 shadow-xl z-[10000]"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />

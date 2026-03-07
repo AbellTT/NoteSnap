@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import { Stage1, Stage2, Stage3, Stage4, Stage5, Stage6 } from '../UIMockupLab';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -65,6 +66,7 @@ const HOW_IT_WORKS_STEPS = [
 ];
 
 const HowItWorks = ({ id }) => {
+  const triggerRef = useRef(null);
   const containerRef = useRef(null);
   const panelsRef = useRef([]);
 
@@ -74,12 +76,11 @@ const HowItWorks = ({ id }) => {
       
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: containerRef.current,
+          trigger: triggerRef.current,
+          pin: containerRef.current,
           start: "top top",
-          end: `+=${(panels.length - 1) * 105}%`,
-          pin: true,
-          scrub: 0.5, // "Goldilocks" smoothing (0.5s catch-up)
-          anticipatePin: 1.5,
+          end: `+=${panels.length * 135}%`, // Massive runway to ensure no early unpin
+          scrub: 1, // Smooths out micro-jitters to prevent 'teleport' feel
         }
       });
 
@@ -87,35 +88,42 @@ const HowItWorks = ({ id }) => {
         if (i === 0) return;
         
         // "Goldilocks" Cinematic Animation (GPU Optimized)
+        // We only use yPercent here. Removing scale/opacity ensures 100% smooth GPU hand-off.
         tl.fromTo(panel, 
-          { 
-            yPercent: 100,
-            opacity: 0.9,
-            scale: 0.99
-          },
+          { yPercent: 100 },
           { 
             yPercent: 0,
-            opacity: 1,
-            scale: 1,
-            ease: "power2.out",
+            ease: "none",
             duration: 1,
             force3D: true
           },
-          i - 1 // Overlap for fluidity
+          "+=0.4"
         );
+
+        // PERFORMANCE OPTIMIZATION: Hide panels that are completely covered 
+        // by the current one to save serious GPU drawing costs.
+        if (i > 0) {
+          tl.set(panels[i-1], { autoAlpha: 0 }, "-=0.1");
+        }
       });
+
+      // Add a 1.0s buffer at the very end. 
+      // This ensures the final panel stays pinned while the user finishes the scroll distance.
+      tl.to({}, { duration: 1.0 });
+
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div id={id} ref={containerRef} className="relative w-full h-screen overflow-hidden">
-      {HOW_IT_WORKS_STEPS.map((step, i) => (
+    <div id={id} ref={triggerRef} className="relative w-full">
+      <div ref={containerRef} className="relative w-full h-screen overflow-hidden">
+        {HOW_IT_WORKS_STEPS.map((step, i) => (
         <section
           key={i}
           ref={(el) => (panelsRef.current[i] = el)}
-          className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl scroll-panel-gpu"
+          className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden scroll-panel-gpu"
           style={{ zIndex: i + 10 }}
           >
           {/* Background Split Layer (Aligned to 40/60 Split) */}
@@ -128,7 +136,7 @@ const HowItWorks = ({ id }) => {
           <div className="relative z-10 max-w-[1440px] mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-[35%_65%] px-6 sm:px-12">
             
             {/* Left Column: Text (Aligned for consistency with Hero) */}
-            <div className={`flex flex-col justify-center lg:pr-12 order-2 lg:order-1 transition-all duration-700`}>
+            <div className={`flex flex-col justify-center lg:pr-12 order-2 lg:order-1`}>
               <span className={`text-6xl md:text-8xl font-dela mb-4 opacity-10 ${step.isDark ? 'text-brand-bg' : 'text-brand-text'}`}>
                 0{i + 1}
               </span>
@@ -167,14 +175,15 @@ const HowItWorks = ({ id }) => {
                   </div>
                 </div>
                 
-                {/* Depth Decor */}
-                <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl ${step.isDark ? 'bg-brand-bg/20' : 'bg-brand-action/20'} -z-10`}></div>
-                <div className={`absolute -bottom-20 -left-20 w-48 h-48 rounded-full blur-3xl ${step.isDark ? 'bg-brand-bg/10' : 'bg-brand-action/10'} -z-10`}></div>
+                {/* Depth Decor (GPU Optimized) */}
+                <div className="absolute -top-10 -right-10 w-48 h-48 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.15)' : 'rgba(59,130,246,0.15)'} 0%, transparent 70%)` }}></div>
+                <div className="absolute -bottom-20 -left-20 w-64 h-64 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.1)' : 'rgba(59,130,246,0.1)'} 0%, transparent 70%)` }}></div>
               </div>
             </div>
           </div>
         </section>
       ))}
+      </div>
     </div>
   );
 };

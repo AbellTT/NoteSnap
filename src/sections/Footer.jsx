@@ -20,23 +20,12 @@ const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-gray-100 py-20 px-6 sm:px-12 md:px-20">
+      <div className="mx-auto mb-20 text-center">
+        <h1 className="font-dela text-5xl md:text-7xl lg:text-8xl xl:text-9xl leading-none tracking-tighter text-brand-text">
+          NoteSnap
+        </h1>
+      </div>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-        
-        {/* Logo & Tagline */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-action flex items-center justify-center text-white font-bold text-lg">
-              N
-            </div>
-            <span className="text-2xl font-dela text-brand-text tracking-tighter">
-              NoteSnap
-            </span>
-          </div>
-          <p className="text-gray-400 font-sk leading-relaxed max-w-[240px]">
-            Notes made simple. Turning your scattered thoughts into structured success.
-          </p>
-        </div>
-
         {/* Dynamic Links */}
         {footerLinks.map((section, i) => (
           <div key={i} className="flex flex-col gap-6">
