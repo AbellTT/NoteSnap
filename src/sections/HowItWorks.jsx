@@ -67,7 +67,6 @@ const HOW_IT_WORKS_STEPS = [
 
 const HowItWorks = ({ id }) => {
   const triggerRef = useRef(null);
-  const containerRef = useRef(null);
   const panelsRef = useRef([]);
 
   useEffect(() => {
@@ -77,111 +76,97 @@ const HowItWorks = ({ id }) => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: triggerRef.current,
-          pin: containerRef.current,
           start: "top top",
-          end: `+=${panels.length * 150}%`, 
-          scrub: 1.5, // Matches the smooth feel of ProblemPlusSolution
-          anticipatePin: 1,
+          end: `+=${panels.length * 100}%`,
+          pin: true,
+          scrub: 1.5,
+          pinSpacing: true,
         }
       });
 
-      // Panel 01 is already on screen (base layer).
-      // We start by giving it a moment of stillness before Panel 02 arrives.
-      tl.to({}, { duration: 0.5 });
-
+      // Initialize positions
       panels.forEach((panel, i) => {
-        if (i === 0) return;
-        
-        // Panels 02-06 slide up from the bottom (yPercent: 100) to cover the previous panels.
-        tl.fromTo(panel, 
-          { yPercent: 100 },
-          { 
-            yPercent: 0,
-            ease: "none",
-            duration: 1,
-            force3D: true
-          }
-        );
-
-        // Add a "reading pause" after each panel settles
-        tl.to({}, { duration: 0.8 });
+        if (i > 0) {
+          gsap.set(panel, { y: "100%" });
+        }
       });
 
-      // Final buffer to keep the last panel pinned before scrolling to the next section
-      tl.to({}, { duration: 1.0 });
-
-    }, containerRef);
+      // Animation sequence
+      panels.forEach((panel, i) => {
+        if (i === 0) {
+           return;
+        }
+        
+        tl.to(panel, { 
+          y: "0%",
+          ease: "none",
+          duration: 1,
+          immediateRender: false
+        });
+      });
+    }, triggerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div id={id} ref={triggerRef} className="relative w-full">
-      <div ref={containerRef} className="relative w-full h-screen overflow-hidden">
+    <div id={id} ref={triggerRef} className="w-full">
+      <div className="relative w-full h-screen overflow-hidden bg-brand-bg">
         {HOW_IT_WORKS_STEPS.map((step, i) => (
-        <section
-          key={i}
-          ref={(el) => (panelsRef.current[i] = el)}
-          className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden scroll-panel-gpu"
-          style={{ zIndex: i + 10 }}
+          <section
+            key={i}
+            ref={(el) => (panelsRef.current[i] = el)}
+            className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden"
+            style={{ zIndex: i + 10 }}
           >
-          {/* Background Split Layer (Aligned to 40/60 Split) */}
-          <div className="absolute inset-0 flex">
-            <div className={`w-full lg:w-[40%] h-full ${step.bgColor}`}></div>
-            <div className={`hidden lg:block w-[60%] h-full border-l ${step.isDark ? 'border-brand-bg/10' : 'border-brand-text/10'} ${step.rightBg}`}></div>
-          </div>
-
-          {/* Content Layer (Standardized max-w-[1440px] to match Hero) */}
-          <div className="relative z-10 max-w-[1440px] mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-[35%_65%] px-6 sm:px-12">
-            
-            {/* Left Column: Text (Aligned for consistency with Hero) */}
-            <div className={`flex flex-col justify-center lg:pr-12 order-2 lg:order-1`}>
-              <span className={`text-6xl md:text-8xl font-dela mb-4 opacity-10 ${step.isDark ? 'text-brand-bg' : 'text-brand-text'}`}>
-                0{i + 1}
-              </span>
-              <h2 className={`text-4xl md:text-5xl lg:text-5xl font-dela ${step.textColor} leading-tight mb-8`}>
-                {step.title.split(' ')[0]} <br />
-                <span className={step.accentColor}>{step.title.split(' ').slice(1).join(' ')}</span>
-              </h2>
-              <p className={`font-sk text-lg md:text-xl leading-relaxed max-w-md ${step.isDark ? 'text-brand-bg/60' : 'text-gray-500'}`}>
-                {step.description}
-              </p>
+            {/* Background Split Layer */}
+            <div className="absolute inset-0 flex">
+              <div className={`w-full lg:w-[40%] h-full ${step.bgColor}`}></div>
+              <div className={`hidden lg:block w-[60%] h-full border-l ${step.isDark ? 'border-brand-bg/10' : 'border-brand-text/10'} ${step.rightBg}`}></div>
             </div>
 
-            {/* Right Column: Visual (Live React Component) */}
-            <div className="flex items-center justify-center order-1 lg:order-2 h-full py-10 lg:py-0 lg:pl-10">
-              {/* Size Controller: Hardware accelerated scale */}
-              <div className="relative group w-full scale-110 lg:scale-[1.18] origin-center lg:origin-left">
-                {/* Premium Browser Frame */}
-                <div className="relative rounded-2xl border-4 border-black/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.15)] bg-white max-h-[75vh]">
-                  {/* Fake Browser Window Controls */}
-                  <div className="h-6 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-1.5 shrink-0">
-                    <div className="w-2 h-2 rounded-full bg-red-400 opacity-30"></div>
-                    <div className="w-2 h-2 rounded-full bg-yellow-400 opacity-30"></div>
-                    <div className="w-2 h-2 rounded-full bg-green-400 opacity-30"></div>
-                  </div>
-                  
-                  {/* Live Render Area: Shrunk down for mockup feel */}
-                  <div className="w-full aspect-video overflow-hidden relative bg-white">
-                    {/* 
-                        MOCKUP SCALING LOGIC:
-                        The stages are designed for a 1280px width (UI Lab standard).
-                        We scale them down here to fit the 65% column width perfectly.
-                    */}
-                    <div className="absolute top-0 left-0 w-[1280px] h-[720px] origin-top-left scale-[0.45] sm:scale-[0.55] md:scale-[0.65] lg:scale-[0.5] xl:scale-[0.65]">
-                      <step.Mockup />
+            {/* Content Layer */}
+            <div className="relative z-10 max-w-[1440px] mx-auto w-full h-full grid grid-cols-1 lg:grid-cols-[35%_65%] px-6 sm:px-12">
+              
+              {/* Left Column: Text */}
+              <div className="flex flex-col justify-center lg:pr-12 order-2 lg:order-1">
+                <span className={`text-6xl md:text-8xl font-dela mb-4 opacity-10 ${step.isDark ? 'text-brand-bg' : 'text-brand-text'}`}>
+                  0{i + 1}
+                </span>
+                <h2 className={`text-4xl md:text-5xl lg:text-5xl font-dela ${step.textColor} leading-tight mb-8`}>
+                  {step.title.split(' ')[0]} <br />
+                  <span className={step.accentColor}>{step.title.split(' ').slice(1).join(' ')}</span>
+                </h2>
+                <p className={`font-sk text-lg md:text-xl leading-relaxed max-w-md ${step.isDark ? 'text-brand-bg/60' : 'text-gray-500'}`}>
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Right Column: Visual */}
+              <div className="flex items-center justify-center order-1 lg:order-2 h-full py-10 lg:py-0 lg:pl-10">
+                <div className="relative group w-full scale-110 lg:scale-[1.18] origin-center lg:origin-left">
+                  <div className="relative rounded-2xl border-4 border-black/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.15)] bg-white max-h-[75vh]">
+                    <div className="h-6 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-1.5 shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-red-400 opacity-30"></div>
+                      <div className="w-2 h-2 rounded-full bg-yellow-400 opacity-30"></div>
+                      <div className="w-2 h-2 rounded-full bg-green-400 opacity-30"></div>
+                    </div>
+                    
+                    <div className="w-full aspect-video overflow-hidden relative bg-white">
+                      <div className="absolute top-0 left-0 w-[1280px] h-[720px] origin-top-left scale-[0.45] sm:scale-[0.55] md:scale-[0.65] lg:scale-[0.5] xl:scale-[0.65]">
+                        <step.Mockup />
+                      </div>
                     </div>
                   </div>
+                  
+                  {/* Depth Decor */}
+                  <div className="absolute -top-10 -right-10 w-48 h-48 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.15)' : 'rgba(59,130,246,0.15)'} 0%, transparent 70%)` }}></div>
+                  <div className="absolute -bottom-20 -left-20 w-64 h-64 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.1)' : 'rgba(59,130,246,0.1)'} 0%, transparent 70%)` }}></div>
                 </div>
-                
-                {/* Depth Decor (GPU Optimized) */}
-                <div className="absolute -top-10 -right-10 w-48 h-48 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.15)' : 'rgba(59,130,246,0.15)'} 0%, transparent 70%)` }}></div>
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 -z-10" style={{ backgroundImage: `radial-gradient(circle, ${step.isDark ? 'rgba(253,253,253,0.1)' : 'rgba(59,130,246,0.1)'} 0%, transparent 70%)` }}></div>
               </div>
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        ))}
       </div>
     </div>
   );
