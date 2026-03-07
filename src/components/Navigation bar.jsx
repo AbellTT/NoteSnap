@@ -12,7 +12,7 @@ import gsap from 'gsap';
  * 3. Custom Hamburger: CSS-transformed bar animation (requested style).
  * 4. Smooth Anchor Links: Handles scrolling to #features, #process, etc.
  */
-const NavigationBar = () => {
+const NavigationBar = ({ isLoading }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const drawerRef = useRef(null);
@@ -28,6 +28,8 @@ const NavigationBar = () => {
 
   // --- GSAP: Cinematic Entry Animation (Runs once on mount) ---
   useEffect(() => {
+    if (isLoading) return;
+
     // 1. Create a GSAP Context for clean-up (avoids double-animation in Dev mode)
     let ctx = gsap.context(() => {
       // Synchronize Entrance: Both Navbar and Toggle arrive together
@@ -38,14 +40,14 @@ const NavigationBar = () => {
           opacity: 1, 
           duration: 1.2, 
           ease: "power4.out", 
-          delay: 0.2,
+          delay: 0.1,
           force3D: true // GPU acceleration
         }
       );
     });
     
     return () => ctx.revert(); // Clean up animation when component unmounts
-  }, []); // Empty dependency array ensures this ONLY runs once on page load
+  }, [isLoading]); // Run when isLoading changes from true to false
 
   // --- GSAP: Mobile Menu Animation ---
   useEffect(() => {

@@ -54,8 +54,8 @@ function App() {
         className={`relative text-brand-text overflow-x-hidden min-h-screen selection:bg-brand-action selection:text-white bg-brand-bg transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
       >
         <GridBackground />
-        <NavigationBar />
-        <Hero />
+        <NavigationBar isLoading={isLoading} />
+        <Hero isLoading={isLoading} />
         <ProblemPlusSolution/>
         <HowItWorks id="how-it-works" />
         <Benefits />

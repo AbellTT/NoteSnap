@@ -7,7 +7,7 @@ import { FlipWords } from '../components/flipwords';
 import SplitText from '../components/SplitText';
 import InfiniteTicker from '../components/InfiniteTicker';
 
-const Hero = () => {
+const Hero = ({ isLoading }) => {
   const sentence = "Tame the into every Turn note chaos. clarity.".split(" ");
   
   //actual sentence : Tame the chaos. Turn every note into clarity.
@@ -16,30 +16,14 @@ const Hero = () => {
   const robotContainerRef = useRef(null); // Right side (Robot Pod)
   const tickerRef = useRef(null);         // Bottom ticker
   const flipWords = ["Clean.", "Sharp.", "Smart.", "Organized."];
+  
   useEffect(() => {
-    // --- ANIMATION 1: BLINKING ---
-    const blinkTimeline = gsap.timeline({
-      repeat: -1, 
-      repeatDelay: 3 + Math.random() * 2 
-    });
-
-    blinkTimeline
-      .to(['#robot-eye-left', '#robot-eye-right'], {
-        scaleY: 0.1,
-        duration: 0.1,
-        transformOrigin: "center center",
-        ease: "power2.inOut"
-      })
-      .to(['#robot-eye-left', '#robot-eye-right'], {
-        scaleY: 1,
-        duration: 0.1,
-        ease: "power2.inOut"
-      });
+    if (isLoading) return;
 
     // --- GSAP: Optimized Symmetrical Entrance (Timeline) ---
     let ctx = gsap.context(() => {
       const entranceTl = gsap.timeline({
-        delay: 0.3,
+        delay: 0.1, // Reduced delay since preloader exit already takes time
         defaults: { duration: 1.5, ease: "power4.out", force3D: true }
       });
 
@@ -64,6 +48,32 @@ const Hero = () => {
         0.6 // Start after main content begins
       );
     });
+
+    return () => ctx.revert();
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    // --- ANIMATION 1: BLINKING ---
+    const blinkTimeline = gsap.timeline({
+      repeat: -1, 
+      repeatDelay: 3 + Math.random() * 2 
+    });
+
+    blinkTimeline
+      .to(['#robot-eye-left', '#robot-eye-right'], {
+        scaleY: 0.1,
+        duration: 0.1,
+        transformOrigin: "center center",
+        ease: "power2.inOut"
+      })
+      .to(['#robot-eye-left', '#robot-eye-right'], {
+        scaleY: 1,
+        duration: 0.1,
+        ease: "power2.inOut"
+      });
+
     // --- ANIMATION : MOUSE TRACKING ---
     const handleMouseMove = (e) => {
       // Calculate cursor position relative to screen center (-0.5 to 0.5)
