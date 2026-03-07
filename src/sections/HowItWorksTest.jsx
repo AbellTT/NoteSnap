@@ -55,14 +55,7 @@ const HowItWorksTest = ({ id }) => {
           duration: 1,
           immediateRender: false
         });
-
-        // "Deserved space" after each slide
-        tl.to({}, { duration: 0.5 });
       });
-
-      // Final buffer to prevent abrupt unpin
-      tl.to({}, { duration: 0.5 });
-
     }, containerRef);
 
     return () => ctx.revert();
