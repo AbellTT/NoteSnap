@@ -25,31 +25,42 @@ const HowItWorksTest = ({ id }) => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: triggerRef.current,
-          pin: containerRef.current,
           start: "top top",
-          end: `+=${panels.length * 100}%`, // Each panel gets 100vh of scroll
-          scrub: 1,
-          anticipatePin: 1,
+          end: "+=600%", // Clean 6-viewport runway
+          pin: true,
+          scrub: 1.5, // Match ProblemPlusSolution
+          pinSpacing: true,
+          // Removed anticipatePin which often causes jumps
         }
       });
 
-      // Panel 01 is static. Others slide over it.
+      // Initially set all panels except the first to be off-screen
       panels.forEach((panel, i) => {
-        if (i === 0) return;
-        
-        tl.fromTo(panel, 
-          { yPercent: 100 },
-          { 
-            yPercent: 0,
-            ease: "none",
-            duration: 1
-          }
-        );
-        // Small pause between slides
-        tl.to({}, { duration: 0.2 });
+        if (i > 0) {
+          gsap.set(panel, { y: "100%" });
+        }
       });
 
-      // Final buffer
+      // Create the stacking sequence
+      panels.forEach((panel, i) => {
+        if (i === 0) {
+           // Provide a "breath" for the first section
+           tl.to({}, { duration: 0.5 });
+           return;
+        }
+        
+        tl.to(panel, { 
+          y: "0%",
+          ease: "none",
+          duration: 1,
+          immediateRender: false
+        });
+
+        // "Deserved space" after each slide
+        tl.to({}, { duration: 0.5 });
+      });
+
+      // Final buffer to prevent abrupt unpin
       tl.to({}, { duration: 0.5 });
 
     }, containerRef);
@@ -58,16 +69,19 @@ const HowItWorksTest = ({ id }) => {
   }, []);
 
   return (
-    <div id={id} ref={triggerRef} className="relative w-full">
-      <div ref={containerRef} className="relative w-full h-screen overflow-hidden">
+    <div id={id} ref={triggerRef} className="w-full">
+      <div className="relative w-full h-screen overflow-hidden">
         {TEST_STEPS.map((step, i) => (
           <section
             key={i}
             ref={(el) => (panelsRef.current[i] = el)}
-            className={`absolute inset-0 w-full h-full flex items-center justify-center ${step.color}`}
+            className={`absolute inset-0 w-full h-full flex items-center justify-center ${step.color} border-b border-black/10`}
             style={{ zIndex: i + 10 }}
           >
-            <h2 className="text-9xl font-dela text-white">{step.title}</h2>
+            <div className="text-center">
+              <h2 className="text-9xl font-dela text-white">{step.title}</h2>
+              <p className="text-white/50 font-sk font-bold uppercase tracking-widest mt-4">Safe Logic Test</p>
+            </div>
           </section>
         ))}
       </div>
