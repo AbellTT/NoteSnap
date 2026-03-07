@@ -286,7 +286,7 @@ const Hero = ({ isLoading }) => {
       clearInterval(switchFocus);
       ctx.revert();
     };
-  }, []);
+  }, [isLoading]);
 
   return (
     <section className="relative min-h-screen pt-20 flex flex-col overflow-hidden">
