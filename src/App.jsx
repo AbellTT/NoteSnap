@@ -6,7 +6,7 @@ import Hero from './sections/Hero'
 import NavigationBar from './components/Navigation bar'
 import GridBackground from './components/GridBackground'
 import ProblemPlusSolution from './sections/ProblemPlusSolution'
-import HowItWorks from './sections/HowItWorks'
+import HowItWorks from './sections/HowItWorksTest'
 import Benefits from './sections/Benefits'
 import CTA from './sections/CTA'
 import Footer from './sections/Footer'
@@ -24,7 +24,7 @@ function App() {
     // Initialize Lenis for smooth global scrolling with snappy settings
     const lenis = new Lenis({
       lerp: 0.08, 
-      wheelMultiplier: 1.5,
+      wheelMultiplier: 1.2,
       touchMultiplier: 2,
       infinite: false,
     });
