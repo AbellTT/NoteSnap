@@ -79,16 +79,20 @@ const HowItWorks = ({ id }) => {
           trigger: triggerRef.current,
           pin: containerRef.current,
           start: "top top",
-          end: `+=${panels.length * 135}%`, // Massive runway to ensure no early unpin
-          scrub: 1, // Smooths out micro-jitters to prevent 'teleport' feel
+          end: `+=${panels.length * 150}%`, 
+          scrub: 1.5, // Matches the smooth feel of ProblemPlusSolution
+          anticipatePin: 1,
         }
       });
+
+      // Panel 01 is already on screen (base layer).
+      // We start by giving it a moment of stillness before Panel 02 arrives.
+      tl.to({}, { duration: 0.5 });
 
       panels.forEach((panel, i) => {
         if (i === 0) return;
         
-        // "Goldilocks" Cinematic Animation (GPU Optimized)
-        // We only use yPercent here. Removing scale/opacity ensures 100% smooth GPU hand-off.
+        // Panels 02-06 slide up from the bottom (yPercent: 100) to cover the previous panels.
         tl.fromTo(panel, 
           { yPercent: 100 },
           { 
@@ -96,19 +100,14 @@ const HowItWorks = ({ id }) => {
             ease: "none",
             duration: 1,
             force3D: true
-          },
-          "+=0.4"
+          }
         );
 
-        // PERFORMANCE OPTIMIZATION: Hide panels that are completely covered 
-        // by the current one to save serious GPU drawing costs.
-        if (i > 0) {
-          tl.set(panels[i-1], { autoAlpha: 0 }, "-=0.1");
-        }
+        // Add a "reading pause" after each panel settles
+        tl.to({}, { duration: 0.8 });
       });
 
-      // Add a 1.0s buffer at the very end. 
-      // This ensures the final panel stays pinned while the user finishes the scroll distance.
+      // Final buffer to keep the last panel pinned before scrolling to the next section
       tl.to({}, { duration: 1.0 });
 
     }, containerRef);
